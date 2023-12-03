@@ -1,35 +1,33 @@
 
-# Import necessary libraries
 import streamlit as st
-import pandas as pd
-import matplotlib.pyplot as plt
 
-# Set the title of the dashboard
-st.title('Advanced Streamlit App (No Plotly)')
+def main():
+    st.title("Simple Calculator App")
 
-# Add a file uploader to allow the user to upload a CSV file
-uploaded_file = st.file_uploader('Upload a CSV file', type=['csv'])
+    # Get user input
+    num1 = st.number_input("Enter the first number:", value=0.0)
+    num2 = st.number_input("Enter the second number:", value=0.0)
 
-# If a file is uploaded, load the data into a DataFrame
-if uploaded_file is not None:
-    df = pd.read_csv(uploaded_file)
+    # Perform calculation
+    operation = st.radio("Select an operation:", ["Addition", "Subtraction", "Multiplication", "Division"])
+    result = calculate(num1, num2, operation)
 
-    # Display the raw data
-    st.write('### Raw Data')
-    st.write(df)
+    # Display the result
+    st.write(f"Result: {result}")
 
-    # Allow the user to select columns for plotting
-    selected_columns = st.multiselect('Select Columns for Plotting', df.columns)
+def calculate(num1, num2, operation):
+    if operation == "Addition":
+        return num1 + num2
+    elif operation == "Subtraction":
+        return num1 - num2
+    elif operation == "Multiplication":
+        return num1 * num2
+    elif operation == "Division":
+        if num2 != 0:
+            return num1 / num2
+        else:
+            st.error("Division by zero is not allowed.")
+            return None
 
-    # Plot the selected columns using Matplotlib
-    if selected_columns:
-        for column in selected_columns:
-            plt.plot(df[column], label=column)
-
-        plt.title('Customizable Plot')
-        plt.xlabel('Index')
-        plt.ylabel('Values')
-        plt.legend()
-        st.pyplot(plt)
-else:
-    st.write('Upload a CSV file to get started.')
+if __name__ == "__main__":
+    main()
